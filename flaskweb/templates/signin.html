@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+ 
+{% block content %}
+
+  <h2>Account Login Page</h2>
+ 
+  {% for message in form.email.errors %}
+    <div class="flash">{{ message }}</div>
+  {% endfor %}
+   
+  {% for message in form.password.errors %}
+    <div class="flash">{{ message }}</div>
+  {% endfor %}
+   
+  <form id="signin">
+  <!-- action="{{ url_for('signin') }}" method=post> -->
+    {{ form.hidden_tag() }}
+
+    {{ form.email.label }}
+    {{ form.email }}
+
+    {{ form.password.label }}
+    {{ form.password }}
+
+    {{ form.submit }}
+  </form>
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+  <script type="text/javascript">
+  $(document).ready(function(){
+    $("#signin").submit(function(){
+      $.post("{{ url_for('signin') }}", $('#signin').serialize(), function(e){
+        if(e == "true")
+        {
+          document.location.href="{{ url_for('profile') }}"
+        }
+        else if(e == "false")
+        {
+          alert("Invalid Username/Password")
+        }
+        else
+        {
+          alert(e);
+        }
+      });
+      return false;
+    });
+  });
+  </script>
+{% endblock %}
