@@ -35,7 +35,7 @@
     </table>
 
 
-  <div id="out"></div>
+  <div id="out">{{ spin }}</div>
      
   <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
   <script type="text/javascript">
@@ -46,22 +46,22 @@
         {
           $('#out').html('Withdrawal has been Processed, Please take your cash!!!')
         }
-        // else if(e == "NOO")
-        // {
-        //     $('#out').html('Invalid Amount')
-        // }
-        // else if(e == "NOO")
-        // {
-        //     $('#out').html('Invalid Input')
-        // }
-        // else if(e == "False")
-        // {
-        //   $('#out').html('Invalid Input')
-        // }
-        // else if(e == "gett")
-        // {
-        //   $('#out').html('Incorrect Transaction Pin')
-        // }
+        else if(e == "NOO")
+        {
+            $('#out').html('Invalid Amount')
+        }
+        else if(e == "NOO")
+        {
+            $('#out').html('Invalid Input')
+        }
+        else if(e == "False")
+        {
+          $('#out').html('Invalid Input')
+        }
+        else if(e == "pin")
+        {
+          $('#out').html('Incorrect Transaction Pin')
+        }
         else
         {
           alert(e);

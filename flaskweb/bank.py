@@ -37,9 +37,12 @@ class Banks(object):
 		return showdep
 
 	def selectpin(self):
-		depall = 'select `pin` from `acount_pin` where `actno` ='+str(session['uid'])
+		depall = 'select * from `account_pin` where `actno` ='+str(session['uid'])
 		depo = db.engine.execute(depall)
-		return depo
+		dip = {}
+		for r in depo:
+			dip = r[2] 
+		return dip
 	
 	def balance(self): 
 		return self.totaldeposit() - self.withdraw()

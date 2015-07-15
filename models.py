@@ -60,9 +60,9 @@ class Withdraw(db.Model):
 	withdraw_by = db.Column(db.String(100))
 	date = db.Column(db.String(54))
 
-	def __init__(self, actno, amount, withdraw_by, date=None):
+	def __init__(self, withdraw_by, amount, date=None):
 		#uid = db.Column(db.Integer, primary_key = True)
-		self.actno = actno
+		self.actno = withdraw_by
 		self.amount = amount
 		self.withdraw_by = withdraw_by
 		self.date = datetime.now()
