@@ -2,6 +2,6 @@
 {% block content %}
     <h2>Profile<h2>
     <h3>This is {{ session['email'] }}'s profile page<h3>
-    <h4>NAME: ___________________________________________</h4>
-    <h4>EMAIL:_____________________________________________</h4>
+    <h4>NAME: {{ session['fname'] }} {{ session['lname'] }}</h4>
+    <h4>EMAIL: {{ session['email'] }}</h4>
 {% endblock %}

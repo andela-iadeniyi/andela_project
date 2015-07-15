@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+ 
+{% block content %}
+  <h2>Account Deposit Form</h2>
+ 
+  {% for message in form.accountno.errors %}
+    <div class="flash">{{ message }}</div>
+  {% endfor %}
+   
+  {% for message in form.depositor.errors %}
+    <div class="flash">{{ message }}</div>
+  {% endfor %}
+   
+  {% for message in form.amount.errors %}
+    <div class="flash">{{ message }}</div>
+  {% endfor %}
+   
+  <form id="depositForm">
+    {{ form.hidden_tag() }}
+     
+    {{ form.accountno.label }}
+    {{ form.accountno }}
+     
+    {{ form.depositor.label }}
+    {{ form.depositor }}
+     
+    {{ form.amount.label }}
+    {{ form.amount }}
+
+    {{ form.submit }}
+  </form>
+
+  <div id="out"></div>
+     
+  <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+  <script type="text/javascript">
+  $(document).ready(function(){
+    $("#depositForm").submit(function(){
+      $.post("{{ url_for('deposit') }}", $('#depositForm').serialize(), function(e){
+        if(e == "True")
+        {
+          $('#out').html('Deposit Added successfully')
+        }
+        else if(e == "False")
+        {
+          $('#out').html('Invalid Input')
+        }
+        else
+        {
+          alert(e);
+        }
+      });
+      return false;
+    });
+  });
+  </script>
+{% endblock %}
