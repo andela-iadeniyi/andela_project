@@ -2,6 +2,7 @@ from flask.ext.wtf import Form
 from wtforms import TextField,TextAreaField, SubmitField, validators, ValidationError, PasswordField, BooleanField, SelectField
 from wtforms.validators import Required
 from models import db, User, Account, Deposit
+from flask import session
 
 
 '''
@@ -47,6 +48,14 @@ class DepositForm(Form):
   def __init__(self, *arg, **kwargs):
     Form.__init__(self, *arg, **kwargs)
 
+class WithdrawalForm(Form):
+  amount = TextField("Amount to Withdraw", [validators.Required("Enter the the exact Amount you want to withdraw.")])
+  withdrawpin = TextField("Transaction PIN", [validators.Required("Enter Transaction PIN.")])
+  submit = SubmitField("  Submit  ")
+
+  def __init__(self, *arg, **kwargs):
+    Form.__init__(self, *arg, **kwargs)
+
 
 class SigninForm(Form):
   email = TextField("Email",  [validators.Required("Please enter your email address."), validators.Email("Please enter your email address.")])
@@ -62,6 +71,7 @@ class SigninForm(Form):
 
     user = User.query.filter_by(email = self.email.data.lower()).first()
     if user and user.check_password(self.password.data):
+      session['uid'] = user.uid
       return True
     else:
       self.email.errors.append("Invalid e-mail or password")

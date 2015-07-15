@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h2>WITHDRAWAL PAGE<h2>
+
+
+  <h2>Account Withdrawal Form</h2>
+    
+  {% for message in form.withdrawpin.errors %}
+    <div class="flash">{{ message }}</div>
+  {% endfor %}
+   
+  {% for message in form.amount.errors %}
+    <div class="flash">{{ message }}</div>
+  {% endfor %}
+   
+  <form id="withdrawform">
+    {{ form.hidden_tag() }}
+     
+    {{ form.amount.label }}
+    {{ form.amount }}
+     
+    {{ form.withdrawpin.label }}
+    {{ form.withdrawpin }}
+     
+    {{ form.submit }}
+  </form>
+
+
+
+    <table>
+    	<tr><th>SN</th><th>AMOUNT</th><th>DATE</th></tr>
+    {% for i in withdrawhistory %}
+        <tr><td>&nbsp;</td><td>{{ withdrawhistory[i] }}</td><td>{{ i }}</td></tr>
+    {% endfor %}
+    </table>
+
+
+  <div id="out"></div>
+     
+  <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+  <script type="text/javascript">
+  $(document).ready(function(){
+    $("#withdrawform").submit(function(){
+      $.post("{{ url_for('withdraw') }}", $('#withdrawform').serialize(), function(e){
+        if(e == "True")
+        {
+          $('#out').html('Withdrawal has been Processed, Please take your cash!!!')
+        }
+        // else if(e == "NOO")
+        // {
+        //     $('#out').html('Invalid Amount')
+        // }
+        // else if(e == "NOO")
+        // {
+        //     $('#out').html('Invalid Input')
+        // }
+        // else if(e == "False")
+        // {
+        //   $('#out').html('Invalid Input')
+        // }
+        // else if(e == "gett")
+        // {
+        //   $('#out').html('Incorrect Transaction Pin')
+        // }
+        else
+        {
+          alert(e);
+        }
+      });
+      return false;
+    });
+  });
+  </script>
+
+{% endblock %}

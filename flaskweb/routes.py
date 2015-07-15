@@ -1,9 +1,11 @@
 from flaskweb import app, auth
 from flask import render_template, request, session, make_response, url_for, redirect, jsonify
-from models import db, User, Deposit, Account, generate_password_hash
-from form import SignupForm, SigninForm, DepositForm
+from models import db, User, Deposit, Account, Withdraw, Account_Pin, generate_password_hash
+from form import SignupForm, SigninForm, DepositForm, WithdrawalForm
+from bank import Banks
 
 
+dpo = Banks()
 
 @auth.get_password
 def get_password(username):
@@ -21,6 +23,7 @@ def bad_request(error):
 @app.errorhandler(404)
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
+'''
 tasks = [
     {
         'id': 1,
@@ -43,13 +46,13 @@ def make_public_task(task):
         else:
             new_task[field] = task[field]
     return new_task
-@app.route('/todo/api/v1.0/tasks', methods=['GET'])
+@app.route('/ibrbank/api/v1.0/value/', methods=['GET'])
 # @auth.login_required
 def get_tasks():
     return jsonify({'tasks': [make_public_task(task) for task in tasks]})
 
 
-@app.route('/todo/api/v1.0/tasks/<int:task_id>', methods=['GET'])
+@app.route('/ibrbank/api/v1.0/value/<int:task_id>', methods=['GET'])
 # @auth.login_required
 def get_task(task_id):
     task = [task for task in tasks if task['id'] == task_id]
@@ -58,7 +61,7 @@ def get_task(task_id):
     return jsonify({'task': make_public_task(task[0])})
 
 
-@app.route('/todo/api/v1.0/tasks', methods=['POST'])
+@app.route('/ibrbank/api/v1.0/value', methods=['POST'])
 # @auth.login_required
 def create_task():
     if not request.json or 'title' not in request.json:
@@ -71,9 +74,9 @@ def create_task():
     }
     tasks.append(task)
     return jsonify({'task': make_public_task(task)}), 201
+'''
 
-
-@app.route('/todo/api/v1.0/tasks/<int:task_id>', methods=['PUT'])
+@app.route('/ibrbank/api/v1.0/value/<int:task_id>', methods=['PUT'])
 @auth.login_required
 def update_task(task_id):
     task = [task for task in tasks if task['id'] == task_id]
@@ -95,7 +98,7 @@ def update_task(task_id):
     task[0]['done'] = request.json.get('done', task[0]['done'])
     return jsonify({'task': make_public_task(task[0])})
 
-@app.route('/todo/api/v1.0/tasks/<int:task_id>', methods=['DELETE'])
+@app.route('/ibrbank/api/v1.0/value/<int:task_id>', methods=['DELETE'])
 @auth.login_required
 def delete_task(task_id):
     task = [task for task in tasks if task['id'] == task_id]
@@ -132,6 +135,10 @@ def signup():
 			db.session.add(newuser)
 			db.session.commit()
 			session['email'] = newuser.email
+
+			pin = Account_Pin(newuser.uid, dpo.randomNum())
+			db.session.add(pin)
+			db.session.commit()
 			return redirect(url_for('profile'))
 
 			return "[1] Create a new user [2] sign in the user [3] redirect to the user's profile"
@@ -156,14 +163,16 @@ def profile():
 
 @app.route('/deopsit', methods=['GET', 'POST'])
 def deposit():
+	if 'email' not in session:
+		return redirect(url_for('signin'))
 	form = DepositForm()
    
 	if request.method == 'POST':
 		if form.validate() == False:
 			return render_template('deposit.html', form=form)
 		else:
-			newuser = Deposit(form.accountno.data, form.depositor.data, form.amount.data)
-			db.session.add(newuser)
+			deposit = Deposit(form.accountno.data, form.depositor.data, form.amount.data)
+			db.session.add(deposit)
 			db.session.commit()
 			return "True"
 
@@ -171,6 +180,36 @@ def deposit():
 
 	elif request.method == 'GET':
 		return render_template('deposit.html', form=form)
+
+@app.route('/accountinfo')
+def accountinfo():
+	if 'email' not in session:
+		return redirect(url_for('signin'))
+
+	return render_template('accountinfo.html', TotalDeposit=dpo.totaldeposit(), ShowDep=dpo.deposithistory(), TotalWithdrawal=dpo.withdraw(), AccountBalance=dpo.balance())
+
+@app.route('/withdraw', methods=['GET', 'POST'])
+def withdraw():
+	if 'email' not in session:
+		return redirect(url_for('signin'))
+	else:
+		form = WithdrawalForm()
+
+		if request.method == 'POST':
+			if form.validate() == False:
+				return render_template('withdraw.html', form=form)
+			else:
+				if form.amount.data > dpo.balance() or form.amount.data < 0:
+					return "NOO"
+				else:
+					withd =  Withdraw(form.amount.data, form.withdrawpin.data, session['uid'])
+					db.session.add(withd)
+					db.session.commit()
+					return "True"
+
+					return "False"
+		elif request.method == 'GET':
+			return render_template('withdraw.html', withdrawhistory=dpo.witdrawhistory(), form=form)
 
 
 @app.route('/signin', methods=['GET', 'POST'])
@@ -193,4 +232,5 @@ def signout():
 		return redirect(url_for('signin'))
 
 	session.pop('email', None)
+	session.clear()
 	return redirect(url_for('home'))

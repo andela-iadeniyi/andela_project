@@ -52,6 +52,30 @@ class Deposit(db.Model):
 		self.amount = amount
 		self.date = datetime.now()
 
+class Withdraw(db.Model):
+	__tablename__ = 'withdrawal'
+	uid = db.Column(db.Integer, primary_key = True)
+	actno = db.Column(db.Integer)
+	amount = db.Column(db.Integer)
+	withdraw_by = db.Column(db.String(100))
+	date = db.Column(db.String(54))
+
+	def __init__(self, actno, amount, withdraw_by, date=None):
+		#uid = db.Column(db.Integer, primary_key = True)
+		self.actno = actno
+		self.amount = amount
+		self.withdraw_by = withdraw_by
+		self.date = datetime.now()
+
+class Account_Pin(db.Model):
+	__tablename__ = 'account_pin'
+	uid = db.Column(db.Integer, primary_key = True)
+	actno = db.Column(db.Integer, unique = True)
+	pin = db.Column(db.Integer)
+
+	def __init__(self, actno, pin):
+		self.actno = actno
+		self.pin = pin
 
 '''
   def edit_user(request, id):
