@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h2>WELCOME PAGE<h2>
+    <hint>Please save the information bellow, You might not likely see it again</hint>
+    <h3>This is {{ session['email'] }}'s profile page<h3>
+    <h4>NAME: {{ lname }} {{ fname }}</h4>
+    <h4>ACCOUNT NUMBER: {{ actnumber }}</h4>
+    <h4>ACCOUNT PIN: {{ actpin }}</h4>
+
+{% endblock %}

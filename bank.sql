@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 15, 2015 at 12:52 PM
+-- Generation Time: Jul 15, 2015 at 07:12 PM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -19,6 +19,19 @@ SET time_zone = "+00:00";
 --
 -- Database: `development`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `account_pin`
+--
+
+CREATE TABLE IF NOT EXISTS `account_pin` (
+  `uid` int(11) NOT NULL AUTO_INCREMENT,
+  `actno` int(11) NOT NULL,
+  `pin` int(11) NOT NULL,
+  PRIMARY KEY (`uid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -55,8 +68,7 @@ CREATE TABLE IF NOT EXISTS `deposit` (
   `amount` int(11) NOT NULL,
   `date` varchar(20) NOT NULL,
   PRIMARY KEY (`uid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -73,5 +85,23 @@ CREATE TABLE IF NOT EXISTS `users` (
   `account_type` int(11) NOT NULL,
   PRIMARY KEY (`uid`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `withdrawal`
+--
+
+CREATE TABLE IF NOT EXISTS `withdrawal` (
+  `uid` int(11) NOT NULL AUTO_INCREMENT,
+  `actno` int(11) NOT NULL,
+  `amount` int(11) NOT NULL,
+  `withdraw_by` varchar(100) NOT NULL,
+  `date` varchar(50) NOT NULL,
+  PRIMARY KEY (`uid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

@@ -123,6 +123,10 @@ def about():
 def contact():
 	return render_template('contact.html')
 
+@app.route('/welcome')
+def welcome():
+	return render_template('welcome.html')
+
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
 	form = SignupForm()
@@ -139,7 +143,7 @@ def signup():
 			pin = Account_Pin(newuser.uid, dpo.randomNum())
 			db.session.add(pin)
 			db.session.commit()
-			return redirect(url_for('profile'))
+			return render_template('welcome.html', fname=newuser.firstname, lname=newuser.lastname, actnumber=newuser.uid, actpin=pin.pin)
 
 			return "[1] Create a new user [2] sign in the user [3] redirect to the user's profile"
 
