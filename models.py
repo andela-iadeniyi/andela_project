@@ -1,17 +1,9 @@
 from flask.ext.sqlalchemy import SQLAlchemy
 from werkzeug import generate_password_hash, check_password_hash
 from datetime import datetime
-from config import WHOOSH_ENABLED
 
 db = SQLAlchemy()
-enable_search = WHOOSH_ENABLED
-if enable_search:
-    import flask.ext.whooshalchemy as whooshalchemy
 
-# ...
-if enable_search:
-    whooshalchemy.whoosh_index(app, Post)
-    
 
 class User(db.Model):
 	__tablename__ = 'users'
