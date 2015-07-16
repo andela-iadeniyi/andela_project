@@ -1,6 +1,9 @@
 {% extends "layout.html" %}
  
 {% block content %}
+
+    <h3><a href="{{ url_for('withdraw')}}">Makes Withdrawal</a></h3>
+
   <h2>Account Deposit Form</h2>
  
   {% for message in form.accountno.errors %}
@@ -15,26 +18,45 @@
     <div class="flash">{{ message }}</div>
   {% endfor %}
    
-  <form id="depositForm">
-    {{ form.hidden_tag() }}
-     
+  <form id="depositForm" class="signup">
+  <table>{{ form.hidden_tag() }}
+     <tr><td>
     {{ form.accountno.label }}
+    </td><td>
     {{ form.accountno }}
-     
+    </td></tr>
+     <tr><td>     
     {{ form.depositor.label }}
+    </td><td>
     {{ form.depositor }}
-     
+    </td></tr>
+     <tr><td>     
     {{ form.amount.label }}
+    </td><td>
     {{ form.amount }}
-
+    </td></tr>
+     <tr><td>
+    </td><td>
     {{ form.submit }}
+    </td></tr>
+    </table>
   </form>
 
   <div id="out"></div>
      
-  <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    <h3 align="center">DEPOSIT HISTORY</h3>
+<div class="CSSTableGenerator">
+    <table>
+      <tr><th>SN</th><th>AMOUNT</th><th>DATE</th></tr>
+    {% for i in ShowDep %}
+        <tr><td>&nbsp;</td><td>{{ ShowDep[i] }}</td><td>{{ i }}</td></tr>
+    {% endfor %}
+    </table>
+</div>
+  <script src="js/jquery.min.js'"></script>
   <script type="text/javascript">
   $(document).ready(function(){
+    $("#out").hide()
     $("#depositForm").submit(function(){
       $.post("{{ url_for('deposit') }}", $('#depositForm').serialize(), function(e){
         if(e == "True")

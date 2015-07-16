@@ -1,38 +1,73 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Welcome to IBR-BANK</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-  </head>
-  <body>
- 
+<html lang="en">
+<head>
+<title>Home</title>
+<meta charset="utf-8">
+<link rel="stylesheet" href="css/reset.css" type="text/css" media="all">
+<link rel="stylesheet" href="css/layout.css" type="text/css" media="all">
+<link rel="stylesheet" href="css/style.css" type="text/css" media="all">
+<link rel="stylesheet" href="css/TableCSSCode.css" type="text/css" media="all">
+<script type="text/javascript" src="js/jquery.min.js" ></script>
+<script type="text/javascript" src="js/cufon-yui.js"></script>
+<script type="text/javascript" src="js/cufon-replace.js"></script>
+<script type="text/javascript" src="js/Myriad_Pro_400.font.js"></script>
+<script type="text/javascript" src="js/Myriad_Pro_700.font.js"></script>
+<script type="text/javascript" src="js/Myriad_Pro_600.font.js"></script>
+<!--[if lt IE 9]>
+  <script type="text/javascript" src="http://info.template-help.com/files/ie6_warning/ie6_script_other.js"></script>
+  <script type="text/javascript" src="js/html5.js"></script>
+<![endif]-->
+</head>
+<body id="page1">
+<div class="main">
+<!-- header -->
   <header>
-    <div class="container">
-      <h1 class="logo">IBR-BANK</h1>
-      <nav>
-        <ul class="menu">
-          <li><a href="{{ url_for('home') }}">Home</a></li>
-          <li><a href="{{ url_for('about') }}">About</a></li>
-          <li><a href="{{ url_for('contact') }}">Contact</a></li>
-          {% if 'email' in session %}
-          <li><a href="{{ url_for('profile') }}">Profile</a></li>
-          <li><a href="{{ url_for('accountinfo') }}">Account Info</a></li>
-          <li><a href="{{ url_for('withdraw') }}">Withdraw</a></li>
-          <li><a href="{{ url_for('deposit') }}">Deposit</a></li>
-          <li><a href="{{ url_for('signout') }}">Sign Out</a></li>
-          {% else %}
-          <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
-          <li><a href="{{ url_for('signin') }}">Sign In</a></li>
-          {% endif %}
-        </ul>
-      </nav>
+    <div class="wrapper">
+      <h1><a href="index.html" id="logo">Smart Biz</a></h1>
+      <form id="search" action="" method="post">
+        <div class="bg">
+          <input type="submit" class="submit" value="">
+          <input type="text" class="input">
+        </div>
+      </form>
     </div>
-  </header>
- 
-    <div class="container">
+    <nav>
+      <ul id="menu">
+        {% if 'email' in session %}
+        <li class="alpha" id="menu_active"><a href="{{ url_for('profile') }}"><span><span>Home</span></span></a></li>
+        <li><a href="{{ url_for('accountinfo') }}"><span><span>Account</span></span></a></li>
+        <li><a href="{{ url_for('withdraw') }}"><span><span>Transactions</span></span></a></li>
+        <li class="omega"><a href="{{ url_for('signout') }}"><span><span>Sign Out</span></span></a></li>
+        {% else %}
+        <li class="alpha" id="menu_active"><a href="{{ url_for('home')}}"><span><span>Home</span></span></a></li>
+        <li><a href="{{ url_for('about')}}"><span><span>About</span></span> </a></li>
+        <li><a href="{{ url_for('contact')}}"><span><span>Contact</span></span></a></li>
+        <li><a href="{{ url_for('signup')}}"><span><span>Sign Up</span></span></a></li>
+        <li class="omega"><a href="{{ url_for('signin')}}"><span><span>Sign In</span></span></a></li>
+        {% endif %}
+      </ul>
+    </nav>    
+    {% if 'email' in session %}
+    {% else %}
+    <div class="wrapper">
+      <div class="text">
+        <span class="text1">Effective<span>business solutions</span></span>
+        <a href="#" class="button">read more</a>
+      </div>
+    </div>
+    {% endif %}
+  </header><div class="ic">More Website Templates at TemplateMonster.com!</div>
+<!-- / header -->
+<!-- content -->
+  <section id="content">
+    <div class="wrapper">
+      <div class="wrapper">
       {% block content %}
       {% endblock %}
+      </div>
     </div>
-    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
-  </body>
+  </section>
+</div>
+<script type="text/javascript"> Cufon.now(); </script>
+</body>
 </html>

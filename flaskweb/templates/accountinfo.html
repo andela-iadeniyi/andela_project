@@ -1,18 +1,55 @@
 {% extends "layout.html" %}
 {% block content %}
     <h2>Profile<h2>
-    <h3>This is {{ session['uid'] }}'s profile page<h3>
-    <h4>NAME: {{ session['fname'] }} {{ session['lname'] }}</h4>
+    <h3>ACCOUNT NUMBER: {{ session['uid'] }}<h3>
+    <h4>NAME: {{ fname }} {{ lname }}</h4>
     <h4>EMAIL: {{ session['email'] }}</h4>
     <h4>Total Deposit: {{ TotalDeposit }}</h4>
     <h4>Total Withdrawal: {{ TotalWithdrawal }}</h4>
     <h4>Account balance: {{ AccountBalance }}</h4>
 
-    <h2>DEPOSIT HISTORY</h2>
-    <table>
-    	<tr><th>SN</th><th>AMOUNT</th><th>DATE</th></tr>
-    {% for i in ShowDep %}
-        <tr><td>&nbsp;</td><td>{{ ShowDep[i] }}</td><td>{{ i }}</td></tr>
-    {% endfor %}
-    </table>
+<form id="psdupdate">
+<table>
+    <tr><td>OLD PASSWORD:</td><td><input type="password" name="password" id="psd"></td></tr>
+    <tr><td>NEW PASSWORD:</td><td><input type="password" name="password1" id="psd"></td></tr>
+    <tr><td>CONFIRM NEW PASSWORD:</td><td><input type="password" name="password2" id="psd"></td></tr>
+</table>
+</form>
+
+
+  <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+  <script type="text/javascript">
+  $(document).ready(function(){
+    $('#out').hide();
+    if($('#password1').val() == $('#password2').val())
+    {
+        $("#psdupdate").submit(function(){
+          $.post("{{ url_for('psdupdate') }}", $('#psdupdate').serialize(), function(e){
+            if(e == "True")
+            {
+             $('#out').show();
+              $('#out').html('Withdrawal has been Processed, Please take your cash!!!')
+              setTimeout(function(){$('#out').hide();$('#psdupdate').reset;}, 5000)
+            }
+            else
+            {
+             $('#out').show();
+              $('#out').html('Error Updating Password')
+              setTimeout(function(){$('#out').hide();$('#psdupdate').reset;}, 5000)
+            }
+          });
+    }
+    else
+    {
+        $('#out').show();
+        $('#out').html('Password is not thesame')
+        setTimeout(function(){$('#out').hide();$('#psdupdate').reset;}, 5000)
+
+    }
+      return false;
+    }
+    });
+  });
+  </script>
+
 {% endblock %}

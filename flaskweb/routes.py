@@ -139,6 +139,7 @@ def signup():
 			db.session.add(newuser)
 			db.session.commit()
 			session['email'] = newuser.email
+			session['uid'] = newuser.uid
 
 			pin = Account_Pin(newuser.uid, dpo.randomNum())
 			db.session.add(pin)
@@ -190,7 +191,10 @@ def accountinfo():
 	if 'email' not in session:
 		return redirect(url_for('signin'))
 
-	return render_template('accountinfo.html', TotalDeposit=dpo.totaldeposit(), ShowDep=dpo.deposithistory(), TotalWithdrawal=dpo.withdraw(), AccountBalance=dpo.balance())
+	return render_template('accountinfo.html', fname=session['fname'], lname=session['lname'], TotalDeposit=dpo.totaldeposit(), ShowDep=dpo.deposithistory(), TotalWithdrawal=dpo.withdraw(), AccountBalance=dpo.balance())
+@app.route('/psdupdate', methods=['GET', 'POST'])
+def psdupdate():
+	return render_template('psdupdate.html', form=form)
 
 @app.route('/withdraw', methods=['GET', 'POST'])
 def withdraw():
@@ -212,7 +216,9 @@ def withdraw():
 							db.session.add(withd)
 							db.session.commit()
 							return "True"
-						return "pin"
+						else:
+							session['pin'] = session['pin'] + 1
+							return "pin"
 				else:
 					return "NOO"
 		elif request.method == 'GET':

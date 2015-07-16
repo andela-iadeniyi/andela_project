@@ -1,7 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h2>WITHDRAWAL PAGE<h2>
-
+<h3><a href="{{ url_for('deposit')}}">Makes Deposit</a></h3>
 
   <h2>Account Withdrawal Form</h2>
     
@@ -13,58 +12,76 @@
     <div class="flash">{{ message }}</div>
   {% endfor %}
    
-  <form id="withdrawform">
+  <form id="withdrawform" class="signup">
+    <table>
     {{ form.hidden_tag() }}
-     
+    <tr><td>
     {{ form.amount.label }}
+    </td><td>
     {{ form.amount }}
-     
+    </td></tr>
+    <tr><td>     
     {{ form.withdrawpin.label }}
+    </td><td>
     {{ form.withdrawpin }}
-     
+    </td></tr>
+    <tr><td>     
+    </td><td>
     {{ form.submit }}
+    </td></tr>
+    </table>
   </form>
+  <div id="out"></div>
+  <br />
+  <br />
 
-
-
+<h3 align="center">WITHDRAWAL HISTORY</h3>
+<div class="CSSTableGenerator">
     <table>
     	<tr><th>SN</th><th>AMOUNT</th><th>DATE</th></tr>
     {% for i in withdrawhistory %}
         <tr><td>&nbsp;</td><td>{{ withdrawhistory[i] }}</td><td>{{ i }}</td></tr>
     {% endfor %}
     </table>
+</div>
 
 
-  <div id="out">{{ spin }}</div>
      
   <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
   <script type="text/javascript">
   $(document).ready(function(){
+    $('#out').hide();
     $("#withdrawform").submit(function(){
       $.post("{{ url_for('withdraw') }}", $('#withdrawform').serialize(), function(e){
         if(e == "True")
         {
+         $('#out').show();
           $('#out').html('Withdrawal has been Processed, Please take your cash!!!')
+          setTimeout(function(){$('#out').hide();$('#withdrawform').reset;}, 5000)
         }
         else if(e == "NOO")
         {
+         $('#out').show();
             $('#out').html('Invalid Amount')
+          setTimeout(function(){$('#out').hide();}, 5000)
         }
         else if(e == "NOO")
         {
+         $('#out').show();
             $('#out').html('Invalid Input')
+          setTimeout(function(){$('#out').hide();}, 5000)
         }
         else if(e == "False")
         {
+         $('#out').show();
           $('#out').html('Invalid Input')
+          setTimeout(function(){$('#out').hide();}, 5000)
         }
         else if(e == "pin")
         {
+         $('#out').show();
           $('#out').html('Incorrect Transaction Pin')
-        }
-        else
-        {
-          alert(e);
+          setTimeout(function(){$('#out').hide();}, 5000)
         }
       });
       return false;

@@ -4,26 +4,14 @@ from wtforms.validators import Required
 from models import db, User, Account, Deposit
 from flask import session
 
-
-'''
-class UserDetails(Form):
-    group_id = SelectField(u'Group', coerce=int)
-  
-def edit_user(request, id):
-    user = User.query.get(id)
-    form = Account(request.POST, obj=user)
-    form.group_id.choices = [(g.id, g.name) for g in Group.query.order_by('name')]
-  
-'''
-
 class SignupForm(Form):
 
   firstname = TextField("First name",  [validators.Required("Please enter your first name.")])
   lastname = TextField("Last name",  [validators.Required("Please enter your last name.")])
   email = TextField("Email",  [validators.Required("Please enter your email address."), validators.Email("Please enter your email address.")])
   password = PasswordField('Password', [validators.Required("Please enter a password.")])
-  account = SelectField('Account Type', choices=[('1', 'Savings'), ('2', 'Current'), ('3', 'Fixed')])
-  submit = SubmitField("Create account")
+  account = SelectField('Account Type', choices=[('0', 'Select Account Type'), ('1', 'Savings'), ('2', 'Current'), ('3', 'Fixed')])
+  submit = SubmitField("Sign Up")
  
   def __init__(self, *args, **kwargs):
     Form.__init__(self, *args, **kwargs)
