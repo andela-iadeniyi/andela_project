@@ -8,46 +8,80 @@
     <h4>Total Withdrawal: {{ TotalWithdrawal }}</h4>
     <h4>Account balance: {{ AccountBalance }}</h4>
 
-<form id="psdupdate">
-<table>
-    <tr><td>OLD PASSWORD:</td><td><input type="password" name="password" id="psd"></td></tr>
-    <tr><td>NEW PASSWORD:</td><td><input type="password" name="password1" id="psd"></td></tr>
-    <tr><td>CONFIRM NEW PASSWORD:</td><td><input type="password" name="password2" id="psd"></td></tr>
-</table>
-</form>
 
+  {% for message in form.psd.errors %}
+    <div class="flash">{{ message }}</div>
+  {% endfor %}
+   
+  {% for message in form.psd1.errors %}
+    <div class="flash">{{ message }}</div>
+  {% endfor %}
+  {% for message in form.psd2.errors %}
+    <div class="flash">{{ message }}</div>
+  {% endfor %}
+  <form id="psdupdate" class="signup">
+    <table>
+    {{ form.hidden_tag() }}
+    <tr><td>
+    {{ form.psd.label }}
+    </td><td>
+    {{ form.psd }}
+    </td></tr>
+    <tr><td>     
+    {{ form.psd1.label }}
+    </td><td>
+    {{ form.psd1 }}
+    </td></tr>
+    <tr><td>     
+    {{ form.psd2.label }}
+    </td><td>
+    {{ form.psd2 }}
+    </td></tr>
+    <tr><td>     
+    </td><td>
+    {{ form.submit }}
+    </td></tr>
+    </table>
+  </form>
+  <div id="out"></div>
+  <br />
 
   <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
   <script type="text/javascript">
   $(document).ready(function(){
     $('#out').hide();
-    if($('#password1').val() == $('#password2').val())
-    {
         $("#psdupdate").submit(function(){
-          $.post("{{ url_for('psdupdate') }}", $('#psdupdate').serialize(), function(e){
-            if(e == "True")
+            if($('#password1').val() == $('#password2').val())
             {
-             $('#out').show();
-              $('#out').html('Withdrawal has been Processed, Please take your cash!!!')
-              setTimeout(function(){$('#out').hide();$('#psdupdate').reset;}, 5000)
+                  $.post("{{ url_for('accountinfo') }}", $('#psdupdate').serialize(), function(e){
+                    // if(e == "True")
+                    // {
+                    //  $('#out').show();
+                    //   $('#out').html('Withdrawal has been Processed, Please take your cash!!!')
+                    //   setTimeout(function(){$('#out').hide();$('#psdupdate').reset;}, 5000)
+                    // }
+                    // else
+                    // {
+                    //  $('#out').show();
+                    //   $('#out').html('Error Updating Password')
+                    //   setTimeout(function(){$('#out').hide();$('#psdupdate').reset;}, 5000)
+                    // }
+                    alert(e)
+                  });
+            }
+            else if($('#password1').val() == " " || $('#password2').val() == " " || $('#password').val() == "")
+            {
+                $('#out').show();
+                $('#out').html('Password field is empty')
+                setTimeout(function(){$('#out').hide();$('#psdupdate').reset;}, 5000)
             }
             else
             {
-             $('#out').show();
-              $('#out').html('Error Updating Password')
-              setTimeout(function(){$('#out').hide();$('#psdupdate').reset;}, 5000)
+                $('#out').show();
+                $('#out').html('Password is not thesame')
+                setTimeout(function(){$('#out').hide();$('#psdupdate').reset;}, 5000)
             }
-          });
-    }
-    else
-    {
-        $('#out').show();
-        $('#out').html('Password is not thesame')
-        setTimeout(function(){$('#out').hide();$('#psdupdate').reset;}, 5000)
-
-    }
       return false;
-    }
     });
   });
   </script>

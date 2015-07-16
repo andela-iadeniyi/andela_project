@@ -1,6 +1,6 @@
 from flaskweb import app, auth
 from flask import render_template, request, session, make_response, url_for, redirect, jsonify
-from models import db, User, Deposit, Account, Withdraw, Account_Pin, generate_password_hash
+from models import db, User, Deposit, Account, Withdraw, Account_Pin, generate_password_hash, check_password_hash
 from form import SignupForm, SigninForm, DepositForm, WithdrawalForm
 from bank import Banks
 
@@ -191,10 +191,17 @@ def accountinfo():
 	if 'email' not in session:
 		return redirect(url_for('signin'))
 
+	form = PasswordForm()
+	if request.method == 'POST':
+		if form.validate() == False:
+			return "validate"
+		else:			
+			deptotal = 'update * from `users` set `password` = '+str(generate_password_hash(form.psd1.data))+'where `actno` ='+str(session['uid']+' password='+str(check_password_hash(form.psd.data), password))
+			result = db.engine.execute(deptotal)
 	return render_template('accountinfo.html', fname=session['fname'], lname=session['lname'], TotalDeposit=dpo.totaldeposit(), ShowDep=dpo.deposithistory(), TotalWithdrawal=dpo.withdraw(), AccountBalance=dpo.balance())
-@app.route('/psdupdate', methods=['GET', 'POST'])
+@app.route('/psdupdate')
 def psdupdate():
-	return render_template('psdupdate.html', form=form)
+	return render_template('psdupdate.html')
 
 @app.route('/withdraw', methods=['GET', 'POST'])
 def withdraw():

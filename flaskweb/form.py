@@ -36,6 +36,16 @@ class DepositForm(Form):
   def __init__(self, *arg, **kwargs):
     Form.__init__(self, *arg, **kwargs)
 
+
+class PasswordForm(Form):
+  psd = PasswordField("Old Password", [validators.Required("Please enter your old password.")])
+  psd1 = PasswordField("New Password", [validators.Required("Please enter your new password.")])
+  psd2 = PasswordField("Confirm New Password", [validators.Required("Please enter your new password.")])
+  submit = SubmitField("  Submit  ")
+
+  def __init__(self, *arg, **kwargs):
+    Form.__init__(self, *arg, **kwargs)
+
 class WithdrawalForm(Form):
   amount = TextField("Amount to Withdraw", [validators.Required("Enter the the exact Amount you want to withdraw.")])
   withdrawpin = TextField("Transaction PIN", [validators.Required("Enter Transaction PIN.")])
